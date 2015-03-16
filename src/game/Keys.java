@@ -7,6 +7,7 @@ import controllers.Controller;
 import entities.AlienShip;
 import entities.BaseShip;
 import entities.Ship;
+import game.StateManager.States;
 
 public class Keys extends KeyAdapter implements Controller {
 	public Action action;
@@ -41,7 +42,7 @@ public class Keys extends KeyAdapter implements Controller {
 			this.action.shoot = true;
 			break;
 		case KeyEvent.VK_ESCAPE:
-			Game.gameRunning = false;
+			StateManager.getStateManager().setState(States.MENU);
 			break;
 		case KeyEvent.VK_Z:
 			Ship.shieldOn = true;
@@ -74,7 +75,7 @@ public class Keys extends KeyAdapter implements Controller {
 			this.action.shoot = false;
 			break;
 		case KeyEvent.VK_ESCAPE:
-			Game.gameRunning = false;
+			StateManager.getStateManager().setState(States.MENU);
 			break;
 		case KeyEvent.VK_Z:
 			Ship.shieldOn = false;

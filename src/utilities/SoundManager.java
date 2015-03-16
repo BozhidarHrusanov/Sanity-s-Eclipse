@@ -50,6 +50,7 @@ public class SoundManager {
 	public static void playByIndex(int index) {
 		if (index > clips.length) {
 			System.out.println(" ei vandal nema tolko indexi be");
+			return;
 		}
 		clips[index].setFramePosition(0);
 		clips[index].start();

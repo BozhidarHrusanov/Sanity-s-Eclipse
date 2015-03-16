@@ -22,6 +22,7 @@ public class Ship extends BaseShip {
 	public double shieldRegen = 0.005;
 	protected Animation shieldAnimation;
 	public static boolean shieldOn = false;
+	private static boolean thrusting = false;
 	
 	public Ship(Controller ctrl) {
 		super(new Vector2D(Constants.FRAME_WIDTH / 2,(Constants.FRAME_HEIGHT * 5 / 6)),
@@ -41,7 +42,7 @@ public class Ship extends BaseShip {
 
 	public void reset() {
 		this.s.set(Constants.FRAME_WIDTH / 2, (Constants.FRAME_HEIGHT * 5 / 6));
-		this.d.set(0, 1); // it was (0,-1)
+		this.d.set(0, 1);
 		this.v.set(0, 0);
 	}
 
@@ -76,6 +77,10 @@ public class Ship extends BaseShip {
 				Game.addScore(1000);
 				powerup.setActive(false);
 			}
+		}
+		
+		if (action.thrust == 1) {
+			thrusting = true;
 		}
 		
 		Vector2D particleCoords = new Vector2D(35, 50);
@@ -115,10 +120,6 @@ public class Ship extends BaseShip {
 		Vector2D otherCoords = new Vector2D(marginX, marginY);
 		double rot = this.d.theta() + Math.PI /2; 
 		otherCoords.rotate(-rot); 
-		// kva e razlikata bez minus?
-		// ako e buggavo: asteroida idva ot lqvo/dqsno s +/-, pri izpolzvaneto na nearZero
-		// ako e mega zle: asteroidite da sa kato niva i da ne murdat, koraba kato kombain -- test dat shit
-		// fakanata formula raboti li pri circle otdolu? gotta test dat shit
 
 		boolean nearZero = (Math.min(marginX, marginY) < 1) && (Math.min(marginX, marginY) > -1);
 		double lesserMargin = nearZero ? 1 : Math.min(marginX, marginY);
@@ -169,12 +170,14 @@ public class Ship extends BaseShip {
 	}
 
 	protected void drawThrustFire(Graphics2D g, double rot) {
-		g.setColor(new Color(255, 200, 0));
-		g.translate(this.s.x, this.s.y);
-		g.rotate(rot);
-		int thrustCoefficient = (thrusting ? 1 : 0);
-		g.fillOval(-37, -50, thrustCoefficient * 9, thrustCoefficient * 15);
-		g.fillOval(30, -50, thrustCoefficient * 9, thrustCoefficient * 15);
+		if (thrusting) {
+			g.setColor(new Color(255, 200, 0));
+			g.translate(this.s.x, this.s.y);
+			g.rotate(rot);
+			int thrustCoefficient = (thrusting ? 1 : 0);
+			g.fillOval(-37, -50, thrustCoefficient * 9, thrustCoefficient * 15);
+			g.fillOval(30, -50, thrustCoefficient * 9, thrustCoefficient * 15);
+		}
 	}
 
 	protected void drawInvulnerabilityIndicator(Graphics2D g, double rot) {
@@ -184,7 +187,7 @@ public class Ship extends BaseShip {
 		
 		g.rotate(rot);
 		g.scale(10, 10);
-		g.setColor(new Color(0, 204, 255)); // be6e green
+		g.setColor(new Color(0, 204, 255));
 		if (this.invulnerabilityTimer > 0) {
 			g.setColor(new Color(this.invulnerabilityTimer,
 					Math.abs(this.invulnerabilityTimer - 255), 0));
@@ -192,9 +195,14 @@ public class Ship extends BaseShip {
 		g.fillPolygon(Constants.XP, Constants.YP, Constants.XP.length);
 	}
 	
-	protected void drawShield(Graphics2D g){
-		
+	public static boolean isThrusting() {
+		return thrusting;
 	}
+
+	public static void setThrusting(boolean thrusting) {
+		Ship.thrusting = thrusting;
+	}
+	
 
 	
 }

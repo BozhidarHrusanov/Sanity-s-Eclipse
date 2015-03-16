@@ -12,10 +12,13 @@ public class MusicManager {
 			try {
 				this.backgroundMusic = new OggClip("music/Spag Heddy - The Master.ogg");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
+	}
+	
+	public boolean isPlayingBackgroundMusic(){
+		return !backgroundMusic.stopped();
 	}
 
 	public void loopBackgroundMusic() {
