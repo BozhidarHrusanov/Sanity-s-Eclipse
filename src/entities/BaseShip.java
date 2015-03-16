@@ -20,7 +20,7 @@ public abstract class BaseShip extends GameObject{
 	protected long lastShootTime;
 	
 	protected Controller ctrl;
-	protected static boolean thrusting = false;
+	
 	public Action action = new Action();
 	protected int shootInterval = 300;
 	protected boolean forcedShooting = false;
@@ -71,7 +71,6 @@ public abstract class BaseShip extends GameObject{
 		}
 
 		if (actionObj.thrust == 1) {
-			thrusting = true;
 			int bonusVelocity = 0;
 			for (PowerupEffect powerup : powerupList) {
 				bonusVelocity += powerup.getBonusVelocity();
@@ -80,7 +79,6 @@ public abstract class BaseShip extends GameObject{
 		}
 
 		else if (actionObj.thrust == -1) {
-			thrusting = true;
 			int bonusVelocity = 0;
 			for (PowerupEffect powerup : powerupList) {
 				bonusVelocity += powerup.getBonusVelocity();
@@ -199,14 +197,6 @@ public abstract class BaseShip extends GameObject{
 		if (invulnerabilityTimer > 0) {
 			invulShieldAnimation.drawAnimation(g);
 		}
-	}
-	
-	public static boolean isThrusting() {
-		return thrusting;
-	}
-
-	public static void setThrusting(boolean thrusting) {
-		Ship.thrusting = thrusting;
 	}
 	
 	public int getInvulnerabilityTimer() {

@@ -7,7 +7,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import controllers.BomberController;
 import controllers.ChargeController;
 import controllers.RotateNShoot;
-import controllers.SeekNLaser;
 import controllers.SeekNShoot;
 import entities.AlienBomber;
 import entities.AlienScatter;
@@ -16,8 +15,8 @@ import entities.Asteroid;
 import entities.GameObject;
 import entities.Powerup;
 import entities.Ship;
+import game.StateManager.States;
 import utilities.AnimationManager;
-import utilities.JEasyFrame;
 import utilities.JEasyFrameFull;
 import utilities.MusicManager;
 import utilities.SoundManager;
@@ -26,7 +25,8 @@ import utilities.Vector2D;
 /*  ********************** TO DO *********************** 
 
 - highscore text file, gotta encrypt it to prevent h4x0rz
-- 
+- powerup pickup sfx
+- levelManager: finished lvl -> next lvl; save the lvlManager state
     ****************************************************
     */
 
@@ -35,37 +35,63 @@ public class Game {
 	public List<Asteroid> asteroids = new ArrayList<Asteroid>();
 	public static CopyOnWriteArrayList<GameObject> obj = new CopyOnWriteArrayList<GameObject>();
 	public Keys ctrl;
+	public MenuKeys menuKeys;
+	public static MainMenu mainMenu = new MainMenu();
 	public static Ship ship;
 	public static int score, prevScore;
 	public static int lives = 3;
 	public static boolean gameRunning = true;
+	public static MusicManager musicManager = new MusicManager();
 
 	public Game() {
 
-		for (int i = 0; i < Constants.N_INITIAL_ASTEROIDS; i++) {
-			this.asteroids.add(Asteroid.makeRandomAsteroid());
-		}
 		this.ctrl = new Keys();
-		ship = new Ship(this.ctrl);
-		obj.add(ship);
-		obj.addAll(this.asteroids);
-		createMultipleShips(1, "alienShip3");
-		(new MusicManager()).loopBackgroundMusic();
+		this.menuKeys = new MenuKeys(mainMenu);
+		musicManager.loopBackgroundMusic();
 	}
 
 	public static void main(String[] args) throws Exception {
 		Game game = new Game();
 		View view = new View(game);
-		new JEasyFrameFull(view).addKeyListener(game.ctrl);
+		JEasyFrameFull jFrame = new JEasyFrameFull(view);
 		SoundManager.initSoundManager();
-		
-		// run the game
+
 		while (gameRunning) {
-			game.update();
-			view.repaint();
-			Thread.sleep(Constants.DELAY);
+			
+			jFrame.addKeyListener(game.menuKeys);
+			while (StateManager.getStateManager().getState() == States.MENU && gameRunning) {
+				mainMenu.update();
+				view.repaint();
+				Thread.sleep(Constants.DELAY);
+			}
+			jFrame.removeKeyListener(game.menuKeys);
+			
+			jFrame.addKeyListener(game.ctrl);
+			game.initPlayableGame();
+			while (StateManager.getStateManager().getState() == States.ENDLESS && gameRunning) {
+				game.update();
+				view.repaint();
+				Thread.sleep(Constants.DELAY);
+			}
+			jFrame.removeKeyListener(game.ctrl);
 		}
 		System.exit(0);
+	}
+	
+	private void initPlayableGame() {
+		// dispose of old entities
+		obj = new CopyOnWriteArrayList<>();
+		asteroids = new ArrayList<Asteroid>();
+		ship = null;
+		
+		// initialize new entities
+		for (int i = 0; i < Constants.N_INITIAL_ASTEROIDS; i++) {
+			this.asteroids.add(Asteroid.makeRandomAsteroid());
+		}
+		ship = new Ship(this.ctrl);
+		obj.add(ship);
+		obj.addAll(this.asteroids);
+		createMultipleShips(1, "alienShip3");
 	}
 
 	public static void addScore(int addition) {
@@ -181,6 +207,10 @@ public class Game {
 
 	public static Ship getShip() {
 		return ship;
+	}
+	
+	public static MainMenu getMainMenu(){
+		return mainMenu;
 	}
 	
 	public static double calculateDistance(double relativeX, double relativeY){

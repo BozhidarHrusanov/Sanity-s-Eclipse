@@ -13,6 +13,7 @@ import java.io.IOException;
 import javax.swing.JComponent;
 
 import entities.GameObject;
+import game.StateManager.States;
 import utilities.AnimationManager;
 import utilities.ImageManager;
 
@@ -45,28 +46,45 @@ public class View extends JComponent {
 	@Override
 	public void paintComponent(Graphics g0) {
 		Graphics2D g = (Graphics2D) g0;
-		// paint the background
 		g.drawImage(this.background, this.bgTransf,null); 
-		synchronized (Game.class) {
-			for (GameObject object : this.game.obj){
-				object.draw(g);
-			}
-			AnimationManager.drawAnimations(g);
+		
+		if (StateManager.getStateManager().getState() == States.MENU) {
+			game.getMainMenu().drawMenu(g);
 		}
+		
+		if (StateManager.getStateManager().getState() == States.ENDLESS) {
+			synchronized (Game.class) {
+				for (GameObject object : this.game.obj) {
+					object.draw(g);
+				}
+				AnimationManager.drawAnimations(g);
+			}
+
+			drawHealthIndicator(g);
+			drawShieldBar(g);
+			if (Game.lives <= 0) {
+				g.drawImage(
+						ImageManager.getImage("gameover"),
+						(Constants.FRAME_WIDTH / 2)
+								- ImageManager.getImage("gameover").getWidth(
+										null) / 2,
+						Constants.FRAME_HEIGHT * 1 / 4, null);
+				g.drawImage(
+						ImageManager.getImage("finalscore"),
+						(Constants.FRAME_WIDTH / 2)
+								- ImageManager.getImage("finalscore").getWidth(
+										null) / 2,
+						Constants.FRAME_HEIGHT * 1 / 2, null);
+				drawScoreDigits(g);
+			}
+		}
+	}
+
+	private void drawHealthIndicator(Graphics2D g) {
 		for (int i = 0; i < game.lives; i++){
 			g.drawImage(ImageManager.getImage("retroheart"), 20 + 55*i, 20,
 					ImageManager.getImage("retroheart").getWidth(null)*3,
 					ImageManager.getImage("retroheart").getHeight(null)*3, null);
-		}
-		drawShieldBar(g);
-		if(Game.lives <= 0){
-			g.drawImage(ImageManager.getImage("gameover"),
-					(Constants.FRAME_WIDTH/2)-ImageManager.getImage("gameover").getWidth(null)/2,
-					Constants.FRAME_HEIGHT*1/4, null);
-			g.drawImage(ImageManager.getImage("finalscore"),
-					(Constants.FRAME_WIDTH/2)-ImageManager.getImage("finalscore").getWidth(null)/2,
-					Constants.FRAME_HEIGHT*1/2, null);
-			drawScoreDigits(g);
 		}
 	}
 
