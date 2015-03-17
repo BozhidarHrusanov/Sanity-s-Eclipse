@@ -6,9 +6,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import utilities.ImageManager;
+
 public class MainMenu {
-	
-	private final String[] verticalOptions = { "Play endless", "Toggle music", "Exit" };
+	private double slideProgress;
+	private double slideModifier = 0.02;
+
+	private final String[] verticalOptions = { "play", "endless",
+			"music", "quit" };
 	
 	private int currentOption = 0;
 	
@@ -35,35 +40,57 @@ public class MainMenu {
 	public void select() {
 		String choise = verticalOptions[currentOption];
 		switch(choise){
-		case "Play endless":
+		case "play":
+			StateManager.getStateManager().setState(States.PLAY);
+		case "endless":
 			StateManager.getStateManager().setState(States.ENDLESS);
 			break;
-		case "Toggle music":
+		case "music":
 			if (Game.musicManager.isPlayingBackgroundMusic()){
 				Game.musicManager.stopBackgroundMusic();
 			}else{
 				Game.musicManager.loopBackgroundMusic();
 			}
 			break;
-		case "Exit":
+		case "quit":
 			System.exit(0);
 			break;
 		}
 		
 	}
+	
+	public void drawMenuBackground(Graphics2D g){
+		double imgWidth = ImageManager.getImage("mainMenu").getWidth(null);
+		double imgHeight = ImageManager.getImage("mainMenu").getHeight(null);
+		
+		double distance = imgWidth - Constants.FRAME_WIDTH;
+		
+		slideProgress += slideModifier;
+		if(slideProgress >= 100 || slideProgress <= 0){
+			slideModifier *= -1;
+		}
+		
+		g.drawImage(ImageManager.getImage("mainMenu"),0 , 0,
+				Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT, (int)(slideProgress/100*distance),
+				0, (int)(slideProgress/100*distance + Constants.FRAME_WIDTH),
+				(int)imgHeight, null);
+		
+	}
 
 	public void drawMenu(Graphics2D g) {
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 48));
+		g.drawImage(ImageManager.getImage("logo"),(int) (Constants.FRAME_WIDTH/2 - ImageManager.getImage("logo").getWidth(null)/2), Constants.FRAME_HEIGHT/9, null);
+		int offset = Constants.FRAME_HEIGHT/9;
 		for (int i = 0; i < verticalOptions.length; i++) {
+			int imgWidth = ImageManager.getImage(verticalOptions[i]).getWidth(null);
+			
 			if (i == currentOption) {
-				g.setColor(new Color(0, 255, 0));
-			} else {
-				g.setColor(new Color(255, 0, 0));
+				g.drawImage(ImageManager.getImage("selector"),
+						(int) (Constants.FRAME_WIDTH/2 - imgWidth/2) - (ImageManager.getImage("selector").getWidth(null) + 30),
+						Constants.FRAME_HEIGHT*2/5 + i*offset, null);
 			}
-			g.drawString(verticalOptions[i], (Constants.FRAME_WIDTH
-					- g.getFontMetrics().stringWidth(verticalOptions[i])) / 2,
-					Constants.FRAME_HEIGHT / 2 - 3*50 + i*100);
+			g.drawImage(ImageManager.getImage(verticalOptions[i]),(int) (Constants.FRAME_WIDTH/2 - imgWidth/2), Constants.FRAME_HEIGHT*2/5 + i*offset, null);
 		}
+		
 	}
 	
 

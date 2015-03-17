@@ -16,7 +16,7 @@ public class AlienBomber extends AlienShip {
 			Controller controller, int health, String bulletType) {
 		super(s, v, r, type, controller, health, bulletType, 200);
 		acceleration = Constants.DT/2;
-		shootInterval = 1500;
+		shootInterval = 2000;
 	}
 	
 	public GameObject mkBullet(double offsetXY, double offsetRot) {

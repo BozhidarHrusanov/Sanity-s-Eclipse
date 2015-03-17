@@ -46,15 +46,16 @@ public class View extends JComponent {
 	@Override
 	public void paintComponent(Graphics g0) {
 		Graphics2D g = (Graphics2D) g0;
-		g.drawImage(this.background, this.bgTransf,null); 
 		
 		if (StateManager.getStateManager().getState() == States.MENU) {
+			game.getMainMenu().drawMenuBackground(g);
 			game.getMainMenu().drawMenu(g);
 		}
 		
 		if (StateManager.getStateManager().getState() == States.ENDLESS) {
+			g.drawImage(this.background, this.bgTransf,null); 
 			synchronized (Game.class) {
-				for (GameObject object : this.game.obj) {
+				for (GameObject object : this.game.objects) {
 					object.draw(g);
 				}
 				AnimationManager.drawAnimations(g);

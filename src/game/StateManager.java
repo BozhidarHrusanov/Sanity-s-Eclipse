@@ -2,7 +2,7 @@ package game;
 
 public class StateManager {
 
-	public enum States {MENU, ENDLESS}
+	public enum States {MENU, PLAY ,ENDLESS}
 	private States state = States.MENU;
 	private static StateManager stateManager;
 	

@@ -71,7 +71,13 @@ public class ImageManager {
 			imageNames.add("alienShip5"); //poni4ka aka pernik gerb
 			imageNames.add("bulletImpact");
 			imageNames.add("mine");
-			
+			imageNames.add("mainMenu");
+			imageNames.add("logo");
+			imageNames.add("play");
+			imageNames.add("endless");
+			imageNames.add("music");
+			imageNames.add("quit");
+			imageNames.add("selector");
 			for (int j = 0; j < 23; j++){
 				String tmp = String.format("asteroidExplosion/expl_01_%04d", j);
 				imageNames.add(tmp);
