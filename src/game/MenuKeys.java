@@ -19,19 +19,19 @@ public class MenuKeys extends KeyAdapter{
 		int key = e.getKeyCode();
 		switch (key) {
 		case KeyEvent.VK_UP:
-			SoundManager.playByIndex(6);
+			SoundManager.playByIndex(5);
 			mainMenu.goUp();
 			break;
 		case KeyEvent.VK_DOWN:
-			SoundManager.playByIndex(6);
+			SoundManager.playByIndex(5);
 			mainMenu.goDown();
 			break;
 		case KeyEvent.VK_SPACE:
-			SoundManager.playByIndex(6);
+			SoundManager.playByIndex(5);
 			mainMenu.select();
 			break;
 		case KeyEvent.VK_ENTER:
-			SoundManager.playByIndex(6);
+			SoundManager.playByIndex(5);
 			mainMenu.select();
 			break;
 		case KeyEvent.VK_ESCAPE:

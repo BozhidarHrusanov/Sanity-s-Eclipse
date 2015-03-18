@@ -54,10 +54,8 @@ public class SeekNShoot implements Controller {
 		this.action.turn = 0;
 		if (angleToTarget > 0)
 			this.action.turn = -1;
-			// timer--;
 		else if (angleToTarget < 0) {
 			this.action.turn = 1;
-			// timer++;
 		}
 	}
 	

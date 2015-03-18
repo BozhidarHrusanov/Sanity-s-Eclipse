@@ -1,6 +1,5 @@
 package utilities;
 
-// change package name to fit your own package structure!
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.AudioSystem;
@@ -8,8 +7,6 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.FloatControl;
 
 import java.io.File;
-
-// SoundManager for Asteroids
 
 public class SoundManager {
 
@@ -26,15 +23,10 @@ public class SoundManager {
 	public final static Clip bangMedium = getClip("bangMedium");
 	public final static Clip bangSmall = getClip("bangSmall");
 	public final static Clip explosion = getClip("explosion");
-	public final static Clip beat2 = getClip("beat2");
-	public final static Clip extraShip = getClip("extraShip");
-	public final static Clip fire = getClip("fire");
-	public final static Clip saucerBig = getClip("saucerBig");
-	public final static Clip saucerSmall = getClip("saucerSmall");
-	public final static Clip thrust = getClip("thrust");
+	public final static Clip beep = getClip("beep");
+	public final static Clip pickup = getClip("pickup");
 
-	public final static Clip[] clips = {bangLarge, bangMedium, bangSmall, explosion, beat2, 
-		extraShip, fire, saucerBig, saucerSmall, thrust };
+	public final static Clip[] clips = {bangLarge, bangMedium, bangSmall, explosion, beep, pickup};
 	
 	public static void initSoundManager(){
 		for (int j = 0; j <= 3; j++) {
@@ -49,7 +41,7 @@ public class SoundManager {
  
 	public static void playByIndex(int index) {
 		if (index > clips.length) {
-			System.out.println(" ei vandal nema tolko indexi be");
+			System.out.println(" ei vandal nema tolko indexi be: " + index);
 			return;
 		}
 		clips[index].setFramePosition(0);
@@ -74,19 +66,6 @@ public class SoundManager {
 		return clip;
 	}
 
-	// methods which modify (static) fields
-
-	public static void startThrust() {
-		if (!thrusting) {
-			thrust.loop(-1);
-			thrusting = true;
-		}
-	}
-
-	public static void stopThrust() {
-		thrust.loop(0);
-		thrusting = false;
-	}
 
 	// Custom methods playing a particular sound
 	// Please add your own methods below
@@ -94,8 +73,6 @@ public class SoundManager {
 	public static void asteroids() {
 		play(bangMedium);
 	}
-	public static void extraShip() {
-		play(extraShip);
-	}
+
 
 }

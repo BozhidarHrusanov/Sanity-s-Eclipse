@@ -16,8 +16,6 @@ public class JEasyFrameFull extends JFrame {
 	public static final Rectangle RECTANGLE = device.getDefaultConfiguration().getBounds(); 
 	public static final int WIDTH = RECTANGLE.width; 
 	public static final int HEIGHT = RECTANGLE.height; 
-	//public static final int WIDTH = 800; 
-	//public static final int HEIGHT = 600;
 	
 	public Component comp;
 

@@ -22,15 +22,28 @@ import utilities.MusicManager;
 import utilities.SoundManager;
 import utilities.Vector2D;
 
-/*  ********************** TO DO *********************** 
-
-- highscore text file, gotta encrypt it to prevent h4x0rz
-- powerup pickup sfx
-- levelManager: finished lvl -> next lvl; save the lvlManager state
-- game ends (endless mode), when u start it again the final score screen is still present !
-    ****************************************************
-    */
-
+/*
+ * 							#	#	# RESOURCES USED IN THIS GAME:	#	#	#
+ * 
+ *  - All of the images used in this game are from websites(http://wallpaperswide.com/; www.zedge.net/wallpapers/) 
+ *  for FREE wallpapers. I am not the creator of these images, and I do not claim any ownership of them.
+ *  
+ *  - All of the game sprites and game entity related images(ships, bullets, asteroids, powerups etc.)
+ *   in this game are from the following website (http://opengameart.org/) and they are FREE for use.
+ *   
+ *  - The music used in this game IS copyrighted. I do not claim any ownership of the music.
+ *  The game is for entertainment purposes only and I am not going to use the game to make profit out of it. 
+ *  All of the music that I am using is held in MusicManager.java with their respective song names. All of the songs
+ *  can be found on YouTube.com
+ *  
+ *  - The four .jar files that I am using in order to load up the .ogg music files are not mine, I have found them on
+ *  the Internet and their are FREE to use. They can be found on: (http://www.cokeandcode.com/main/code/) and the name
+ *  of the creator is Kevin Glass. I give him full credit.
+ *  
+ *  -All of the .wav sound files are either from the CE218 directory and they were generously provided by the module
+ *  supervisor Norbert Voelker or from a website mentioned above (http://opengameart.org/) and they are FREE to use.
+ *  
+ * */
 public class Game {
 	
 	public List<Asteroid> asteroids = new ArrayList<Asteroid>();
@@ -41,15 +54,16 @@ public class Game {
 	public static Ship ship;
 	public static int score, prevScore;
 	public static int lives = 3;
-	private int currentWave = 1;
+	public static int currentWave = 1;
 	public static boolean gameRunning = true;
-	public static MusicManager musicManager = new MusicManager();
+	public static MusicManager musicManager;
 
 	public Game() {
 
 		this.ctrl = new Keys();
 		this.menuKeys = new MenuKeys(mainMenu);
-		musicManager.loopBackgroundMusic();
+		musicManager = new MusicManager();
+		musicManager.playBackgroundMusic();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -62,6 +76,7 @@ public class Game {
 			jFrame.addKeyListener(game.menuKeys);
 			while (StateManager.getStateManager().getState() == States.MENU && gameRunning) {
 				mainMenu.update();
+				musicManager.updateMusic();
 				view.repaint();
 				Thread.sleep(Constants.DELAY);
 			}
@@ -72,17 +87,19 @@ public class Game {
 			game.generateEnemies();
 			lives=3;
 			score=0;
+			view.generateRandomBackgroundImg();
 			while (StateManager.getStateManager().getState() == States.PLAY && gameRunning) {
 				game.checkListContents();
 				game.update();
+				musicManager.updateMusic();
 				view.repaint();
 				Thread.sleep(Constants.DELAY);
 			}
-			
 			jFrame.removeKeyListener(game.ctrl);
 		}
 		System.exit(0);
 	}
+
 	
 	private void spawnShip() {
 		// dispose of old entities
@@ -117,7 +134,7 @@ public class Game {
 		objects.addAll(this.asteroids);
 
 		double difficulty = 0;
-		double maxDifficulty = 1 + currentWave;
+		double maxDifficulty = 0 + currentWave;
 		currentWave++;
 
 		while (difficulty <= maxDifficulty) {
@@ -223,13 +240,13 @@ public class Game {
 			break;
 		case "alienShip4":
 			AlienShip alien = new AlienShip(position, new Vector2D(0.5, 0.5), 40, type,
-					new SeekNShoot(), 12, "greenBullet", 300);
+					new SeekNShoot(), 6, "greenBullet", 300);
 			alien.setWeaponGrade(3);
 			objects.add(alien);
 			break;
 		case "alienShip5":
 			objects.add(new AlienScatter(position, new Vector2D(0.5, 0.5), 50, type,
-					new RotateNShoot(), 7, "purpleBullet"));
+					new RotateNShoot(), 4, "purpleBullet"));
 			break;
 		default:
 			System.out.println("createAlienShip input type is not valid!");

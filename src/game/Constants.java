@@ -6,8 +6,8 @@ import java.awt.Dimension;
 import utilities.JEasyFrameFull;
 
 public class Constants {
-	public static final int FRAME_HEIGHT = JEasyFrameFull.HEIGHT;//480
-	public static final int FRAME_WIDTH = JEasyFrameFull.WIDTH;//640
+	public static final int FRAME_HEIGHT = JEasyFrameFull.HEIGHT;
+	public static final int FRAME_WIDTH = JEasyFrameFull.WIDTH;
 	public static final Color BG_COLOR = Color.black;
 	public static final Dimension FRAME_SIZE = new Dimension(
 			Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
@@ -36,6 +36,6 @@ public class Constants {
 	
 	// content oriented constants
 	public static final int GAIN_LIVES_THRESHOLD = 5000;
-	public static final int N_INITIAL_ASTEROIDS = 8;
+	public static final int N_INITIAL_ASTEROIDS = 6;
 	public static final int MAX_LIVES = 6;
 }

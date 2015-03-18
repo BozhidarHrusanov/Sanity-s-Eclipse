@@ -13,13 +13,11 @@ public class AlienScatter extends AlienShip{
 		
 	public AlienScatter(Vector2D s, Vector2D v, double r, String type,
 			Controller controller, int health, String bulletType) {
-		super(s, v, r, type, controller, health, bulletType, 150);
-		
+		super(s, v, r, type, controller, health, bulletType, 150);	
 		shootInterval = 3000;
 	}
 	
 	public void update(List<GameObject> objects){
-		//super.update(objects);
 		invulShieldAnimation.setPosition((int)s.x, (int)s.y);
 		invulShieldAnimation.update();
 		for (PowerupEffect powerup : powerupList) {

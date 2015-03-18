@@ -61,6 +61,7 @@ public class Ship extends BaseShip {
 				decrementWeaponGrade();
 			} else {
 				this.dead = true;
+				Game.currentWave = 1;
 			}
 			this.invulnerabilityTimer = this.MAX_INVUL_TIMER;
 		}
@@ -158,10 +159,8 @@ public class Ship extends BaseShip {
 		AffineTransform at = g.getTransform();
 		double shipImageWidth = ImageManager.getImage("ship").getWidth(null) / 2;
 		double shipImageHeight = ImageManager.getImage("ship").getHeight(null) / 2;
-		double rot = this.d.theta() + Math.PI / 2; // used to be pi/2
+		double rot = this.d.theta() + Math.PI / 2; 
 		particleEmitter.drawParticles(g);
-		
-		//drawInvulnerabilityIndicator(g, rot);
 		g.setTransform(at);
 
 		drawThrustFire(g, rot);

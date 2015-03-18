@@ -15,7 +15,7 @@ public class AnimationManager {
 		Animation anim = null;
 		switch (type) {
 		case "explosion":
-			double rand = Math.random();
+			double rand = Math.random();	//different types of explosions are randomly chosen
 			if (rand < 0.33){
 				anim = new Animation(x, y, scale, 0.1, 31, "expl_10_", false);
 			}else if (rand < 0.66){

@@ -30,7 +30,7 @@ public class PowerupEffect {
 			upgrWeapon = true;
 			break;
 		case "bonusVelocity":
-			bonusVelocity = 900.0;
+			bonusVelocity = 700.0;
 			timer = 450;
 			break;
 		case "bonusLife":
@@ -40,8 +40,7 @@ public class PowerupEffect {
 			coin = true;
 			break;
 		}
-	}
-	
+	}	
 
 	public void update(){
 		timer--;

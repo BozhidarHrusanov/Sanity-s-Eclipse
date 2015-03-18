@@ -7,11 +7,12 @@ public class Animation {
 	private double x, y;
 	private boolean active = true;
 	private double currentFrame = 0.0;
-	private double frameModifier;
-	private int numFrames;
+	private double frameModifier; 
+	private int numberOfFrames;
 	private double scale;
 	private String name;
-	private boolean looping;
+	//is the animation looping
+	private boolean isLooping;	
 	
 	public Animation(int x, int y, double scale, double frameModifier,
 			int numFrames, String name, boolean looping){
@@ -19,15 +20,15 @@ public class Animation {
 		this.y = y;
 		this.scale = scale;
 		this.frameModifier = frameModifier;
-		this.numFrames = numFrames;
+		this.numberOfFrames = numFrames;
 		this.name = name;
-		this.looping = looping;
+		this.isLooping = looping;
 	}
 	
 	public void update(){
 		currentFrame += frameModifier;
-		if (currentFrame >= numFrames){
-			if (looping){
+		if (currentFrame >= numberOfFrames){
+			if (isLooping){
 				currentFrame = 0.0;
 			} else {
 				active = false;
@@ -47,7 +48,7 @@ public class Animation {
 			return;
 		}
 		
-		int dimensionX = (int) (ImageManager.getImage(name).getWidth(null)/numFrames);
+		int dimensionX = (int) (ImageManager.getImage(name).getWidth(null)/numberOfFrames);
 		int dimensionY = (int) (ImageManager.getImage(name).getHeight(null));
 		g.drawImage(ImageManager.getImage(name),
 				(int)(x - dimensionX*scale/2), (int)(y - dimensionY*scale/2),

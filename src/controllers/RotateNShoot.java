@@ -19,8 +19,6 @@ public class RotateNShoot implements Controller {
 	} 
 	
 	public void update(AlienShip alien) {
-	//empty on purpose lel
+	//empty on purpose 
 	}
-	
-
 }

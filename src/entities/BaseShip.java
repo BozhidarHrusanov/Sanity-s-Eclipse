@@ -24,8 +24,8 @@ public abstract class BaseShip extends GameObject{
 	public Action action = new Action();
 	protected int shootInterval = 300;
 	protected boolean forcedShooting = false;
-	// decreased to control invulnerability
 	protected final int MAX_INVUL_TIMER = 255;
+	// decreased to control invulnerability
 	protected int invulnerabilityTimer = this.MAX_INVUL_TIMER;
 	protected int weaponGrade = 1;
 	protected final int maxWeaponGrade = 5;
@@ -92,8 +92,6 @@ public abstract class BaseShip extends GameObject{
 				- this.lastShootTime;
 		int currentShootInterval = this.shootInterval;
 		for (PowerupEffect powerupEffect : powerupList) {
-			// iskame li da se stackva? mn e op ama e mn rqdko,
-			// na playera moje da izglejda s4upeno, fix sas bool
 			currentShootInterval += powerupEffect.getRapidFire();
 		}
 		if ((forcedShooting || actionObj.shoot) && currentTimeDifference > currentShootInterval) {
@@ -166,7 +164,6 @@ public abstract class BaseShip extends GameObject{
 				new Vector2D(this.s.x + Math.cos(rot + offsetRot) * (this.radius + 2 + offsetXY),
 							this.s.y  + Math.sin(rot + offsetRot) * (this.radius + 2 + offsetXY)),
 							bulletVel, this.d, bulletType);
-
 		return bullet;
 	}
 	
@@ -179,11 +176,11 @@ public abstract class BaseShip extends GameObject{
 		dd.set(direction.x, direction.y);
 		bulletVel.add(dd, Constants.MUZZLE_VEL);
 		
+		
 		Bullet bullet = new Bullet(
 				new Vector2D(this.s.x + Math.cos(rotateDir) * (this.radius + 2),
 							this.s.y  +  Math.sin(rotateDir) * (this.radius + 2)),
 							bulletVel, direction, bulletType);
-
 		return bullet;
 	} 
 	

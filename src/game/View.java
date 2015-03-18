@@ -18,30 +18,39 @@ import utilities.AnimationManager;
 import utilities.ImageManager;
 
 public class View extends JComponent {
-	// background colour
 	private Game game;
 	AffineTransform bgTransf;
 	Image background;
+	
 
 	public View(Game game) {
-	    this.game = game;
-	    
+		int selector =0;
+	    this.game = game;    
 	    //background
 	    try {
 			ImageManager.initImages();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	    this.background = ImageManager.getImage("backgr");
+	    
+	    generateRandomBackgroundImg();
+	  }
+	
+	public void generateRandomBackgroundImg(){
+		int selector = (int)(Math.random()*10);
+	    String str = Integer.toString(selector);
+	    
+	    this.background = ImageManager.getImage("backgr"+str);
 	    double imWidth = this.background.getWidth(null); 
 	    double imHeight = this.background.getHeight(null); 
+	  
 	    double stretchx = (imWidth > Constants.FRAME_WIDTH? 1 : 
 	                                Constants.FRAME_WIDTH/imWidth); 
 	    double stretchy = (imHeight > Constants.FRAME_HEIGHT? 1 : 
 	                                Constants.FRAME_HEIGHT/imHeight);
 	    this.bgTransf = new AffineTransform(); 
 	    this.bgTransf.scale(stretchx, stretchy);
-	  }
+	}
 
 	@Override
 	public void paintComponent(Graphics g0) {

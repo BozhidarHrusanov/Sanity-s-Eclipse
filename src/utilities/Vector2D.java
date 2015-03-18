@@ -122,8 +122,8 @@ public final class Vector2D {
 	public double dist(Vector2D v) {
 		double dx = v.x - this.x;
 		double dy = v.y - this.y;
-		double abduIsACunt = Math.sqrt((dx * dx) + (dy * dy));
-		return abduIsACunt;
+		double dist = Math.sqrt((dx * dx) + (dy * dy));
+		return dist;
 	}
 
 	// normalise vector so that mag becomes 1

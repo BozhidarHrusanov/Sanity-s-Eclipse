@@ -1,10 +1,12 @@
 package entities;
 
 import game.Constants;
+import game.Game;
 
 import java.awt.Graphics2D;
 import java.util.List;
 
+import utilities.SoundManager;
 import utilities.Vector2D;
 
 public abstract class GameObject {
@@ -34,14 +36,17 @@ public abstract class GameObject {
 	
 	public void collisionHandling(GameObject other) {
 		if (this.getClass() != other.getClass() && this.overlap(other)) {
+			
 			if (this instanceof Powerup || other instanceof Powerup) {
 
 				if (this instanceof Powerup && other instanceof BaseShip) {
-					((BaseShip) other).receivePowerup(((Powerup) this).getType());				
+					((BaseShip) other).receivePowerup(((Powerup) this).getType());
+					SoundManager.playByIndex(4);
 					this.hit();
 					return;
 				} else if (other instanceof Powerup && this instanceof BaseShip) {
 					((BaseShip) this).receivePowerup(((Powerup) other).getType());
+					SoundManager.playByIndex(4);
 					other.hit();
 					return;
 				}
@@ -51,7 +56,7 @@ public abstract class GameObject {
 			other.hit();
 		}
 	}
-	
+
 	public void hit(){
 		this.dead = true;
 	}

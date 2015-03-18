@@ -12,7 +12,7 @@ public class MainMenu {
 	private double slideProgress;
 	private double slideModifier = 0.02;
 
-	private final String[] verticalOptions = { "play",
+	private final String[] options = { "play",
 			"music", "quit" };
 	
 	private int currentOption = 0;
@@ -23,14 +23,14 @@ public class MainMenu {
 
 	public void goUp() {
 		if (currentOption == 0){
-			currentOption = verticalOptions.length-1;
+			currentOption = options.length-1;
 		}else{
 			currentOption--;
 		}
 	}
 	
 	public void goDown() {
-		if (currentOption == verticalOptions.length-1){
+		if (currentOption == options.length-1){
 			currentOption = 0;
 		}else{
 			currentOption++;
@@ -38,16 +38,18 @@ public class MainMenu {
 	}
 
 	public void select() {
-		String choice = verticalOptions[currentOption];
+		String choice = options[currentOption];
 		switch(choice){
 		case "play":
 			StateManager.getStateManager().setState(States.PLAY);
 			break;
 		case "music":
-			if (Game.musicManager.isPlayingBackgroundMusic()){
-				Game.musicManager.stopBackgroundMusic();
+			if (Game.musicManager.isPlayingBackgroundMusic() && !(Game.musicManager.isPaused)){
+				Game.musicManager.isPaused = true;
+				Game.musicManager.stopBackgroundMusic();	
 			}else{
-				Game.musicManager.loopBackgroundMusic();
+				Game.musicManager.isPaused=false;
+				Game.musicManager.playBackgroundMusic();
 			}
 			break;
 		case "quit":
@@ -78,15 +80,15 @@ public class MainMenu {
 	public void drawMenu(Graphics2D g) {
 		g.drawImage(ImageManager.getImage("logo"),(int) (Constants.FRAME_WIDTH/2 - ImageManager.getImage("logo").getWidth(null)/2), Constants.FRAME_HEIGHT/9, null);
 		int offset = Constants.FRAME_HEIGHT/9;
-		for (int i = 0; i < verticalOptions.length; i++) {
-			int imgWidth = ImageManager.getImage(verticalOptions[i]).getWidth(null);
+		for (int i = 0; i < options.length; i++) {
+			int imgWidth = ImageManager.getImage(options[i]).getWidth(null);
 			
 			if (i == currentOption) {
 				g.drawImage(ImageManager.getImage("selector"),
 						(int) (Constants.FRAME_WIDTH/2 - imgWidth/2) - (ImageManager.getImage("selector").getWidth(null) + 30),
 						Constants.FRAME_HEIGHT*2/5 + i*offset, null);
 			}
-			g.drawImage(ImageManager.getImage(verticalOptions[i]),(int) (Constants.FRAME_WIDTH/2 - imgWidth/2), Constants.FRAME_HEIGHT*2/5 + i*offset, null);
+			g.drawImage(ImageManager.getImage(options[i]),(int) (Constants.FRAME_WIDTH/2 - imgWidth/2), Constants.FRAME_HEIGHT*2/5 + i*offset, null);
 		}
 		
 	}

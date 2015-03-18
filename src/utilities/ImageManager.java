@@ -38,7 +38,16 @@ public class ImageManager {
 
 	public static void initImages() throws IOException{
 		ArrayList<String> imageNames = new ArrayList<>();
-			imageNames.add("backgr");
+			imageNames.add("backgr0");
+			imageNames.add("backgr1");
+			imageNames.add("backgr2");
+			imageNames.add("backgr3");
+			imageNames.add("backgr4");
+			imageNames.add("backgr5");
+			imageNames.add("backgr6");
+			imageNames.add("backgr7");
+			imageNames.add("backgr8");
+			imageNames.add("backgr9");
 			imageNames.add("ship");
 			imageNames.add("asteroid1");
 			imageNames.add("asteroid0");
@@ -68,7 +77,7 @@ public class ImageManager {
 			imageNames.add("alienShip2");
 			imageNames.add("alienShip3");
 			imageNames.add("alienShip4");
-			imageNames.add("alienShip5"); //poni4ka aka pernik gerb
+			imageNames.add("alienShip5");
 			imageNames.add("bulletImpact");
 			imageNames.add("mine");
 			imageNames.add("mainMenu");

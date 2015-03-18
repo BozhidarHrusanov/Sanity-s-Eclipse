@@ -14,6 +14,7 @@ public class Bullet extends GameObject {
 	private double rot;
 	private String animName;
 
+
 	public Bullet(Vector2D s, Vector2D v, Vector2D d, String animName) {
 		super(s, v, RADIUS);
 		this.d = d;
@@ -47,4 +48,5 @@ public class Bullet extends GameObject {
 			this.dead = true;
 		}
 	}
+	
 }
