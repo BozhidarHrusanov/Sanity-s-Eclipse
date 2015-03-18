@@ -70,7 +70,7 @@ public class AlienShip extends BaseShip{
 			return;
 		}
 		health--;
-		if (health <= 0) {
+		if (health <= 0) {			
 			this.dead = true;
 			Game.addScore(scoreBounty);
 			AnimationManager.spawnAnimation("explosion", (int) s.x, (int) s.y,

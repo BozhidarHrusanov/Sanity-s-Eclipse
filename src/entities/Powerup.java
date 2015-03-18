@@ -1,5 +1,6 @@
 package entities;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.List;
 
@@ -15,16 +16,16 @@ public class Powerup extends GameObject{
 	public Powerup(Vector2D s, Vector2D v, double r, String type) {
 		super(s, v, r);
 		this.type = type;
+		this.lifeTimer = 1300;
 		// type represents both the name of the sprite file
 		// and the name of the powerup type
 		if (type.equals("coin")){
-			animation = new Animation( (int)s.x, (int)s.y, 1, 0.075,
+			animation = new Animation((int)s.x, (int)s.y, 1, 0.075,
 					10, type, true);
 			return;
 		}
 		animation = new Animation( (int)s.x, (int)s.y, 1, 0.075,
 				8, type, true);
-		this.lifeTimer = 900;
 	}
 
 	@Override

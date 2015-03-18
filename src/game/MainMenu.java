@@ -12,7 +12,7 @@ public class MainMenu {
 	private double slideProgress;
 	private double slideModifier = 0.02;
 
-	private final String[] verticalOptions = { "play", "endless",
+	private final String[] verticalOptions = { "play",
 			"music", "quit" };
 	
 	private int currentOption = 0;
@@ -38,12 +38,10 @@ public class MainMenu {
 	}
 
 	public void select() {
-		String choise = verticalOptions[currentOption];
-		switch(choise){
+		String choice = verticalOptions[currentOption];
+		switch(choice){
 		case "play":
 			StateManager.getStateManager().setState(States.PLAY);
-		case "endless":
-			StateManager.getStateManager().setState(States.ENDLESS);
 			break;
 		case "music":
 			if (Game.musicManager.isPlayingBackgroundMusic()){

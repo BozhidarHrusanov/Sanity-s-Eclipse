@@ -39,7 +39,7 @@ public class SeekNShoot implements Controller {
 			this.action.thrust = 1;
 		}
 		
-		if(3.1 <= Math.abs(angleToTarget) && distance < 700){
+		if(2.5 <= Math.abs(angleToTarget) && distance < 500){
 			if (this.timer > 0) {
 				this.action.shoot = false;
 				this.timer--;

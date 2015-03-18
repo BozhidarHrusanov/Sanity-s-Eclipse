@@ -36,6 +36,6 @@ public class Constants {
 	
 	// content oriented constants
 	public static final int GAIN_LIVES_THRESHOLD = 5000;
-	public static final int N_INITIAL_ASTEROIDS = 0;
+	public static final int N_INITIAL_ASTEROIDS = 8;
 	public static final int MAX_LIVES = 6;
 }

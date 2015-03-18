@@ -26,7 +26,7 @@ public class Ship extends BaseShip {
 	
 	public Ship(Controller ctrl) {
 		super(new Vector2D(Constants.FRAME_WIDTH / 2,(Constants.FRAME_HEIGHT * 5 / 6)),
-				new Vector2D(0, 0),
+				new Vector2D(0, 0),  
 				Constants.SHIP_RADIUS);
 		this.ctrl = ctrl;
 		this.d = new Vector2D(0, 1);
@@ -35,6 +35,8 @@ public class Ship extends BaseShip {
 		particleEmitter = new ParticleEmitter(200, 8);
 		reset();
 		this.shootInterval = 200;
+		acceleration=1.5*Constants.DT;
+		weaponGrade = 3;
 		
 		shieldAnimation = new Animation((int)s.x, (int)s.y,
 				1.5,  0.075, 8, "shieldSpriteGreen", true);
@@ -62,6 +64,10 @@ public class Ship extends BaseShip {
 			}
 			this.invulnerabilityTimer = this.MAX_INVUL_TIMER;
 		}
+	}
+	
+	public void giveInvulnerability(){
+		invulnerabilityTimer = MAX_INVUL_TIMER;
 	}
 
 	public void update(List<GameObject> objects) {

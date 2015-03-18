@@ -58,10 +58,7 @@ public class Game {
 		JEasyFrameFull jFrame = new JEasyFrameFull(view);
 		SoundManager.initSoundManager();
 
-		while (gameRunning) {
-			
-			
-			
+		while (gameRunning) {			
 			jFrame.addKeyListener(game.menuKeys);
 			while (StateManager.getStateManager().getState() == States.MENU && gameRunning) {
 				mainMenu.update();
@@ -71,18 +68,11 @@ public class Game {
 			jFrame.removeKeyListener(game.menuKeys);
 			
 			jFrame.addKeyListener(game.ctrl);
-			while (StateManager.getStateManager().getState() == States.PLAY && gameRunning) {
-				game.initPlayableGame();
-				game.update();	
-				view.repaint();
-				Thread.sleep(Constants.DELAY);
-			}
-			jFrame.removeKeyListener(game.ctrl);
-			
-			jFrame.addKeyListener(game.ctrl);
-			game.initPlayableGame();
+			game.spawnShip();
 			game.generateEnemies();
-			while (StateManager.getStateManager().getState() == States.ENDLESS && gameRunning) {
+			lives=3;
+			score=0;
+			while (StateManager.getStateManager().getState() == States.PLAY && gameRunning) {
 				game.checkListContents();
 				game.update();
 				view.repaint();
@@ -94,20 +84,14 @@ public class Game {
 		System.exit(0);
 	}
 	
-	private void initPlayableGame() {
+	private void spawnShip() {
 		// dispose of old entities
 		objects = new CopyOnWriteArrayList<>();
 		asteroids = new ArrayList<Asteroid>();
 		ship = null;
 		
-		// initialize new entities
-		for (int i = 0; i < Constants.N_INITIAL_ASTEROIDS; i++) {
-			this.asteroids.add(Asteroid.makeRandomAsteroid());
-		}
 		ship = new Ship(this.ctrl);
 		objects.add(ship);
-		objects.addAll(this.asteroids);
-		/*createMultipleShips(1, "alienShip3");*/
 	}
 	
 	private void checkListContents(){
@@ -119,59 +103,41 @@ public class Game {
 		}
 		if(!running){
 			generateEnemies();
+			ship.giveInvulnerability();
 			running=false;
 		}
 	}
 	
-	private void generateEnemies(){
-		double enemyShip1 = 2;
-		double enemyShip2 = 1.25;
-		double enemyShip3 = 1.5;
-		double enemyShip4 = 3;
-		double enemyShip5 = 1.5;
+	private void generateEnemies() {
 		
-		double difficulty = 0;
-		double maxDifficulty = 1 + currentWave*1.20;
-		
-		while(difficulty <= maxDifficulty){
-			
-		if(Math.random() < (double)32.5/100){
-			this.asteroids.add(Asteroid.makeRandomAsteroid());
-			objects.addAll(this.asteroids);
-			difficulty++;
-		}
-		else if(Math.random() < (double)45/100){
-			createAlienShip("alienShip1");
-			difficulty += enemyShip2;
-		}
-		else if(Math.random() < (double)50/100){
-			createAlienShip("alienShip2");
-			difficulty += 1.25;
-		}
-		else if(Math.random() < (double)65/100){
-			createAlienShip("alienShip3");
-			difficulty += 1.5;
-		}
-		else if(Math.random() < (double)80/100){
-			createAlienShip("alienShip4");
-			difficulty += 3;
-		}
-		else{
-			createAlienShip("alienShip5");
-			difficulty += 1.5;
-		}
-		
-		}
-		currentWave++;		
-	}
-	
-	private void endlessMode(){
-		objects = new CopyOnWriteArrayList<>();
-		asteroids = new ArrayList<Asteroid>();
-		ship = null;
-		
+		// initialize new entities
 		for (int i = 0; i < Constants.N_INITIAL_ASTEROIDS; i++) {
 			this.asteroids.add(Asteroid.makeRandomAsteroid());
+		}
+		objects.addAll(this.asteroids);
+
+		double difficulty = 0;
+		double maxDifficulty = 1 + currentWave;
+		currentWave++;
+
+		while (difficulty <= maxDifficulty) {
+
+			if (Math.random() < (double) 25 / 100) {
+				createAlienShip("alienShip1");
+				difficulty += 3;
+			} else if (Math.random() < (double) 50 / 100) {
+				createAlienShip("alienShip2");
+				difficulty += 1;
+			} else if (Math.random() < (double) 60 / 100) {
+				createAlienShip("alienShip3");
+				difficulty += 2;
+			} else if (Math.random() < (double) 80 / 100) {
+				createAlienShip("alienShip4");
+				difficulty += 5;
+			} else {
+				createAlienShip("alienShip5");
+				difficulty += 2;
+			}
 		}
 	}
 
@@ -224,7 +190,7 @@ public class Game {
 	}
 	
 	public static void spawnPowerup(Vector2D s) {
-		if (Math.random() < 0.15) {
+		if (Math.random() < 0.33) {
 			final String[] powerupNames = { "upgrWeapon", "bonusLife",
 					"invulnerabilityShield", "rapidFire", "bonusVelocity",
 					"scatter", "coin" };
@@ -253,7 +219,7 @@ public class Game {
 			break;
 		case "alienShip3":
 			objects.add(new AlienBomber(position, new Vector2D(0.5, 0.5), 40, type,
-					new BomberController(), 10, "redBullet"));
+					new BomberController(), 5, "redBullet"));
 			break;
 		case "alienShip4":
 			AlienShip alien = new AlienShip(position, new Vector2D(0.5, 0.5), 40, type,

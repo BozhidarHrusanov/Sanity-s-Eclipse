@@ -52,7 +52,7 @@ public class View extends JComponent {
 			game.getMainMenu().drawMenu(g);
 		}
 		
-		if (StateManager.getStateManager().getState() == States.ENDLESS) {
+		if (StateManager.getStateManager().getState() == States.PLAY) {
 			g.drawImage(this.background, this.bgTransf,null); 
 			synchronized (Game.class) {
 				for (GameObject object : this.game.objects) {
@@ -63,6 +63,7 @@ public class View extends JComponent {
 
 			drawHealthIndicator(g);
 			drawShieldBar(g);
+			
 			if (Game.lives <= 0) {
 				g.drawImage(
 						ImageManager.getImage("gameover"),
@@ -77,6 +78,8 @@ public class View extends JComponent {
 										null) / 2,
 						Constants.FRAME_HEIGHT * 1 / 2, null);
 				drawScoreDigits(g);
+			} else {
+				drawScoreInGame(g);
 			}
 		}
 	}
@@ -105,6 +108,22 @@ public class View extends JComponent {
 		}
 	}
 	
+	private void drawScoreInGame(Graphics2D g) {
+		g.drawImage(ImageManager.getImage("ingameScore"), 10,Constants.FRAME_HEIGHT-50, null);
+		int digitWidth = ImageManager.getImage("ingameDigits").getWidth(null)/10;
+		String scoreText = Integer.toString(Game.score);
+		for (int i = 0; i < scoreText.length(); i++) {
+			int currentDigit = Integer.parseInt( Character.toString( scoreText.charAt(i)));
+			g.drawImage(ImageManager.getImage("ingameDigits"),
+					160 + i*digitWidth,
+					Constants.FRAME_HEIGHT -50,
+					160 + i*digitWidth + digitWidth,
+					Constants.FRAME_HEIGHT -50 + digitWidth,
+					currentDigit*digitWidth, 0,
+					(currentDigit+1)*digitWidth, digitWidth, null);
+		}
+	}
+	
 	
 	private void drawShieldBar(Graphics2D g){
 		if(Game.lives > 0){
@@ -119,12 +138,19 @@ public class View extends JComponent {
 				Constants.FRAME_WIDTH/2 + barWidth/2, Constants.FRAME_HEIGHT - 5,
 				0, 0, barWidth, barHeight, null);
 			
+			double currentShield=0;
+			double maxShield=0;
+			if (!(Game.getShip() == null)){
+				currentShield = barFillerWidth*Game.getShip().currentShield;
+				maxShield = Game.getShip().maxShield;
+			}
+			
 			g.drawImage(ImageManager.getImage("barFiller"),
 				Constants.FRAME_WIDTH/2 - barFillerWidth/2, Constants.FRAME_HEIGHT - (barFillerHeight+16),
-				Constants.FRAME_WIDTH/2 - barFillerWidth/2 + (int)((barFillerWidth*Game.getShip().currentShield)/Game.getShip().maxShield),
+				Constants.FRAME_WIDTH/2 - barFillerWidth/2 + (int)(currentShield/maxShield),
 				Constants.FRAME_HEIGHT - 16,
 				0, 0,
-				(int)((barFillerWidth*Game.getShip().currentShield)/Game.getShip().maxShield), barFillerHeight, null);
+				(int)(currentShield/maxShield), barFillerHeight, null);
 		}
 	}
 

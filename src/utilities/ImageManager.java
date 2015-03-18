@@ -78,6 +78,9 @@ public class ImageManager {
 			imageNames.add("music");
 			imageNames.add("quit");
 			imageNames.add("selector");
+			imageNames.add("ingameScore");
+			imageNames.add("ingameDigits");
+			
 			for (int j = 0; j < 23; j++){
 				String tmp = String.format("asteroidExplosion/expl_01_%04d", j);
 				imageNames.add(tmp);
