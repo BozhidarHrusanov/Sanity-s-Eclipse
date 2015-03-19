@@ -5,9 +5,9 @@ import entities.AlienShip;
 import game.Action;
 import game.Game;
 
+/* defines the logic behind the "charging" alien ship */
 public class ChargeController implements Controller {
 	Action action = new Action();
-	private int timer;
 
 	@Override
 	public Action action() {
@@ -18,18 +18,16 @@ public class ChargeController implements Controller {
 
 		double playerShipRelativeX = Game.getShip().getX() - alien.getX();
 		double playerShipRelativeY = Game.getShip().getY() - alien.getY();
-		double distance = Game.calculateDistance(playerShipRelativeX, playerShipRelativeY);
-
 		double angleAlienDirection = alien.getD().theta();
 
 		Vector2D toShip = new Vector2D(playerShipRelativeX, playerShipRelativeY);
 		toShip.rotate(-angleAlienDirection);
-		
+
 		double angleToTarget = toShip.theta();
-		
+
 		tickTimer(angleToTarget);
-		
-		if (3.11 <= Math.abs(angleToTarget)){
+
+		if (3.11 <= Math.abs(angleToTarget)) {
 			this.action.thrust = -1;
 		}
 	}

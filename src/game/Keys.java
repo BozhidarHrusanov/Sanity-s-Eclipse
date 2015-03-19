@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 
 import controllers.Controller;
 import entities.AlienShip;
-import entities.BaseShip;
 import entities.Ship;
 import game.StateManager.States;
 
@@ -21,6 +20,7 @@ public class Keys extends KeyAdapter implements Controller {
 		return this.action;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		switch (key) {
@@ -45,15 +45,16 @@ public class Keys extends KeyAdapter implements Controller {
 			StateManager.getStateManager().setState(States.MENU);
 			break;
 		case KeyEvent.VK_Z:
-			Ship.shieldOn = true;
-			if(Ship.currentShield < 1.0){
-				  Ship.shieldOn=false;
-				  return;
-			  }
+			Ship.setShieldOn(true);
+			if (Ship.getCurrentShield() < 1.0) {
+				Ship.setShieldOn(false);
+				return;
+			}
 			break;
 		}
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
 		switch (key) {
@@ -78,7 +79,7 @@ public class Keys extends KeyAdapter implements Controller {
 			StateManager.getStateManager().setState(States.MENU);
 			break;
 		case KeyEvent.VK_Z:
-			Ship.shieldOn = false;
+			Ship.setShieldOn(false);
 			break;
 		}
 	}

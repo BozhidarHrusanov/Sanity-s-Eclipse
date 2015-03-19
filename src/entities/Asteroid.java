@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 public class Asteroid extends GameObject {
-	public static final double MAX_SPEED = 100;
+	private static final double MAX_SPEED = 100;
 	private int type;
 	private double angdeg, angModifier;
 
@@ -26,9 +26,10 @@ public class Asteroid extends GameObject {
 	public static Asteroid makeRandomAsteroid() {
 		return new Asteroid(Math.random() * Constants.FRAME_WIDTH,
 				Math.random() * (Constants.FRAME_HEIGHT * 2 / 3),
-				Game.modifyVelocity(-100 + Math.random() * 200), Game.modifyVelocity(-100
-						+ Math.random() * 200), new Vector2D(10, 10),
-				20 + Math.random() * 30, (int) Math.round((Math.random() * 2)));
+				Game.modifyVelocity(-100 + Math.random() * 200),
+				Game.modifyVelocity(-100 + Math.random() * 200),
+				new Vector2D(10, 10), 20 + Math.random() * 30,
+				(int) Math.round((Math.random() * 2)));
 	}
 
 	public void hit() {

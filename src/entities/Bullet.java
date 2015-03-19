@@ -14,7 +14,6 @@ public class Bullet extends GameObject {
 	private double rot;
 	private String animName;
 
-
 	public Bullet(Vector2D s, Vector2D v, Vector2D d, String animName) {
 		super(s, v, RADIUS);
 		this.d = d;
@@ -25,8 +24,9 @@ public class Bullet extends GameObject {
 	public void draw(Graphics2D g) {
 
 		AffineTransform at = g.getTransform();
-		double beamImageWidth = ImageManager.getImage(animName).getWidth(null)/2;
-		double beamImageHeight = ImageManager.getImage(animName).getHeight(null)/2;
+		double beamImageWidth = ImageManager.getImage(animName).getWidth(null) / 2;
+		double beamImageHeight = ImageManager.getImage(animName)
+				.getHeight(null) / 2;
 		int x = (int) this.s.x;
 		int y = (int) this.s.y;
 
@@ -38,15 +38,15 @@ public class Bullet extends GameObject {
 	}
 
 	public void update(List<GameObject> objects) {
-	
+
 		this.s.add(this.v, Constants.DT);
-		
+
 		boolean outOfScreen = this.s.x < 0 || this.s.y < 0
 				|| this.s.x > Constants.FRAME_WIDTH
 				|| this.s.y > Constants.FRAME_HEIGHT;
-		if (outOfScreen){
+		if (outOfScreen) {
 			this.dead = true;
 		}
 	}
-	
+
 }

@@ -2,27 +2,30 @@ package game;
 
 public class StateManager {
 
-	public enum States {MENU, PLAY}
+	public enum States {
+		MENU, PLAY
+	}
+
 	private States state = States.MENU;
 	private static StateManager stateManager;
-	
-	public static StateManager getStateManager(){
-		if (stateManager == null){
+
+	public static StateManager getStateManager() {
+		if (stateManager == null) {
 			stateManager = new StateManager();
 		}
 		return stateManager;
 	}
-	
-	private StateManager(){
+
+	private StateManager() {
 		// disable constructor
 	}
-	
-	public States getState(){
+
+	public States getState() {
 		return this.state;
 	}
-	
-	public void setState(States state){
+
+	public void setState(States state) {
 		this.state = state;
 	}
-	
+
 }

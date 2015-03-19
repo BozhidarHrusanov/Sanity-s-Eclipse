@@ -8,20 +8,19 @@ import java.awt.geom.AffineTransform;
 import java.util.List;
 
 import controllers.Controller;
-import controllers.RotateNShoot;
-import controllers.SeekNShoot;
 import utilities.AnimationManager;
 import utilities.ImageManager;
 import utilities.Vector2D;
 
-public class AlienShip extends BaseShip{
+public class AlienShip extends BaseShip {
 
 	protected String type;
 	protected int health = 1;
 	protected int scoreBounty = 200;
-	
+
 	public AlienShip(Vector2D s, Vector2D v, double r, String type,
-			Controller controller, int health, String bulletType, int scoreBounty) {
+			Controller controller, int health, String bulletType,
+			int scoreBounty) {
 		super(s, v, r);
 		this.type = type;
 		this.ctrl = controller;
@@ -32,28 +31,28 @@ public class AlienShip extends BaseShip{
 		this.bulletType = bulletType;
 		this.scoreBounty = scoreBounty;
 	}
-	
-	public void update(List<GameObject> objects){
+
+	public void update(List<GameObject> objects) {
 		super.update(objects);
 		ctrl.update(this);
-		
+
 		Vector2D particleCoords = new Vector2D(0, 45);
-		  particleCoords.rotate(d.theta() - Math.PI/2);
-		  particleEmitter.emittParticle((int)(s.x + particleCoords.x),
-				  (int)(s.y + particleCoords.y));
-		  particleEmitter.emittParticle((int)(s.x + particleCoords.x),
-				  (int)(s.y + particleCoords.y));
+		particleCoords.rotate(d.theta() - Math.PI / 2);
+		particleEmitter.emittParticle((int) (s.x + particleCoords.x),
+				(int) (s.y + particleCoords.y));
+		particleEmitter.emittParticle((int) (s.x + particleCoords.x),
+				(int) (s.y + particleCoords.y));
 	}
-	
+
 	public void draw(Graphics2D g) {
 		super.draw(g);
-			
+
 		AffineTransform at = g.getTransform();
 		double shipImageWidth = ImageManager.getImage(type).getWidth(null) / 2;
 		double shipImageHeight = ImageManager.getImage(type).getHeight(null) / 2;
 		double rot = this.d.theta() + Math.PI / 2; // used to be pi/2
 		particleEmitter.drawParticles(g);
-		
+
 		g.setTransform(at);
 		g.translate(this.s.x, this.s.y);
 		g.rotate(rot);
@@ -62,15 +61,16 @@ public class AlienShip extends BaseShip{
 
 		g.setTransform(at);
 	}
-	
+
 	@Override
 	public void hit() {
-		AnimationManager.spawnAnimation("bulletImpact", (int) s.x, (int) s.y, 1);
+		AnimationManager
+				.spawnAnimation("bulletImpact", (int) s.x, (int) s.y, 1);
 		if (invulnerabilityTimer > 0) {
 			return;
 		}
 		health--;
-		if (health <= 0) {			
+		if (health <= 0) {
 			this.dead = true;
 			Game.addScore(scoreBounty);
 			AnimationManager.spawnAnimation("explosion", (int) s.x, (int) s.y,
