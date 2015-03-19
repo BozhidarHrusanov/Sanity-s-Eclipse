@@ -5,9 +5,8 @@ import java.awt.event.KeyEvent;
 
 import utilities.SoundManager;
 
+public class MenuKeys extends KeyAdapter {
 
-public class MenuKeys extends KeyAdapter{
-	
 	public MainMenu mainMenu;
 
 	public MenuKeys(MainMenu mainMenu) {
@@ -35,7 +34,7 @@ public class MenuKeys extends KeyAdapter{
 			mainMenu.select();
 			break;
 		case KeyEvent.VK_ESCAPE:
-			Game.gameRunning = false;
+			Game.setGameRunning(false);
 			break;
 		}
 	}

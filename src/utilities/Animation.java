@@ -7,15 +7,14 @@ public class Animation {
 	private double x, y;
 	private boolean active = true;
 	private double currentFrame = 0.0;
-	private double frameModifier; 
+	private double frameModifier;
 	private int numberOfFrames;
 	private double scale;
 	private String name;
-	//is the animation looping
-	private boolean isLooping;	
-	
+	private boolean isLooping;
+
 	public Animation(int x, int y, double scale, double frameModifier,
-			int numFrames, String name, boolean looping){
+			int numFrames, String name, boolean looping) {
 		this.x = x;
 		this.y = y;
 		this.scale = scale;
@@ -24,62 +23,65 @@ public class Animation {
 		this.name = name;
 		this.isLooping = looping;
 	}
-	
-	public void update(){
+
+	public void update() {
 		currentFrame += frameModifier;
-		if (currentFrame >= numberOfFrames){
-			if (isLooping){
+		if (currentFrame >= numberOfFrames) {
+			if (isLooping) {
 				currentFrame = 0.0;
 			} else {
 				active = false;
 			}
 		}
 	}
-	
-	public void drawAnimation(Graphics2D g){
-		
+
+	public void drawAnimation(Graphics2D g) {
+
 		if (!active) {
 			return;
 		}
-		
-		// explosion animations are organized in separate files, require a special method
+
+		// explosion animations are organized in separate files, require a
+		// special method
 		if (name.contains("expl")) {
 			drawExplosionAnimation(g);
 			return;
 		}
-		
-		int dimensionX = (int) (ImageManager.getImage(name).getWidth(null)/numberOfFrames);
-		int dimensionY = (int) (ImageManager.getImage(name).getHeight(null));
-		g.drawImage(ImageManager.getImage(name),
-				(int)(x - dimensionX*scale/2), (int)(y - dimensionY*scale/2),
-				(int)(x + dimensionX*scale/2), (int)(y + dimensionY*scale/2),
-				(int)currentFrame*dimensionX, 0,
-				(int)(currentFrame+1)*dimensionX, dimensionY, null);
+
+		int dimensionX = ImageManager.getImage(name).getWidth(null)
+				/ numberOfFrames;
+		int dimensionY = (ImageManager.getImage(name).getHeight(null));
+		g.drawImage(ImageManager.getImage(name), (int) (x - dimensionX * scale
+				/ 2), (int) (y - dimensionY * scale / 2), (int) (x + dimensionX
+				* scale / 2), (int) (y + dimensionY * scale / 2),
+				(int) currentFrame * dimensionX, 0, (int) (currentFrame + 1)
+						* dimensionX, dimensionY, null);
 	}
 
 	private void drawExplosionAnimation(Graphics2D g) {
-		
-			String s = String.format("asteroidExplosion/" + name + "%04d",
-					(int) currentFrame);
-			int dimensions = ImageManager.getImage(s).getWidth(null);
-			g.drawImage(ImageManager.getImage(s), (int) (x - (dimensions
-					* scale / 2)), (int) (y - (dimensions * scale / 2)),
-					(int) (dimensions * scale), (int) (dimensions * scale),
-					null);
+
+		String s = String.format("asteroidExplosion/" + name + "%04d",
+				(int) currentFrame);
+		int dimensions = ImageManager.getImage(s).getWidth(null);
+		g.drawImage(ImageManager.getImage(s),
+				(int) (x - (dimensions * scale / 2)),
+				(int) (y - (dimensions * scale / 2)),
+				(int) (dimensions * scale),
+				(int) (dimensions * scale), null);
 	}
-	
-	public boolean getActive(){
+
+	public boolean getActive() {
 		return this.active;
 	}
-	
-	public void modifyPosition(double modX, double modY){
+
+	public void modifyPosition(double modX, double modY) {
 		this.x += modX;
 		this.y += modY;
 	}
-	
-	public void setPosition(int x, int y){
+
+	public void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 }

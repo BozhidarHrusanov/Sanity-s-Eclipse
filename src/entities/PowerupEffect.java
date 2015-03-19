@@ -1,7 +1,8 @@
 package entities;
 
 public class PowerupEffect {
-	
+
+	/* variables used to define the type and bonuses of the power-up */
 	private boolean invulnerabilityShield;
 	private boolean scatter;
 	private boolean upgrWeapon;
@@ -9,13 +10,14 @@ public class PowerupEffect {
 	private int rapidFire;
 	private double bonusVelocity;
 	private boolean coin;
-	
+
 	private int timer;
 	private boolean active = true;
-	
-	public PowerupEffect(String powerupType){
+
+	@SuppressWarnings("incomplete-switch")
+	public PowerupEffect(String powerupType) {
 		timer = 10;
-		switch (powerupType){
+		switch (powerupType) {
 		case "scatter":
 			scatter = true;
 			break;
@@ -40,19 +42,19 @@ public class PowerupEffect {
 			coin = true;
 			break;
 		}
-	}	
+	}
 
-	public void update(){
+	public void update() {
 		timer--;
-		if (timer <= 0){
+		if (timer <= 0) {
 			active = false;
 		}
 	}
-	
+
 	public boolean isBonusLife() {
 		return bonusLife;
 	}
-	
+
 	public boolean isInvulnerabilityShield() {
 		return invulnerabilityShield;
 	}
@@ -72,16 +74,16 @@ public class PowerupEffect {
 	public double getBonusVelocity() {
 		return bonusVelocity;
 	}
-	
-	public boolean isCoin(){
+
+	public boolean isCoin() {
 		return coin;
 	}
 
-	public boolean getActive(){
+	public boolean getActive() {
 		return active;
 	}
-	
-	public void setActive(boolean active){
+
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 

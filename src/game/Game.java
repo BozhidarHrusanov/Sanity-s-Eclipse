@@ -45,18 +45,21 @@ import utilities.Vector2D;
  *  
  * */
 public class Game {
-	
-	public List<Asteroid> asteroids = new ArrayList<Asteroid>();
-	public static CopyOnWriteArrayList<GameObject> objects = new CopyOnWriteArrayList<GameObject>();
-	public Keys ctrl;
-	public MenuKeys menuKeys;
-	public static MainMenu mainMenu = new MainMenu();
-	public static Ship ship;
-	public static int score, prevScore;
-	public static int lives = 3;
-	public static int currentWave = 1;
-	public static boolean gameRunning = true;
-	public static MusicManager musicManager;
+
+	private List<Asteroid> asteroids = new ArrayList<Asteroid>();
+	private static CopyOnWriteArrayList<GameObject> objects = new CopyOnWriteArrayList<GameObject>();
+	private Keys ctrl;
+	private MenuKeys menuKeys;
+	private static MainMenu mainMenu = new MainMenu();
+	private static Ship ship;
+	private static boolean gameRunning = true;
+	private static MusicManager musicManager;
+	// player related variables
+	private static int score;
+	private static int defaultLivesThreshold = 5000;
+	private static int gainLivesThreshold = defaultLivesThreshold;
+	private static int lives = 3;
+	private static int currentWave = 1;
 
 	public Game() {
 
@@ -72,23 +75,24 @@ public class Game {
 		JEasyFrameFull jFrame = new JEasyFrameFull(view);
 		SoundManager.initSoundManager();
 
-		while (gameRunning) {			
+		while (gameRunning) {
 			jFrame.addKeyListener(game.menuKeys);
-			while (StateManager.getStateManager().getState() == States.MENU && gameRunning) {
-				mainMenu.update();
+			while (StateManager.getStateManager().getState() == States.MENU
+					&& gameRunning) {
 				musicManager.updateMusic();
 				view.repaint();
 				Thread.sleep(Constants.DELAY);
 			}
 			jFrame.removeKeyListener(game.menuKeys);
-			
+
 			jFrame.addKeyListener(game.ctrl);
 			game.spawnShip();
 			game.generateEnemies();
-			lives=3;
-			score=0;
-			view.generateRandomBackgroundImg();
-			while (StateManager.getStateManager().getState() == States.PLAY && gameRunning) {
+			lives = 3;
+			score = 0;
+			view.intRandomBackgroundImg();
+			while (StateManager.getStateManager().getState() == States.PLAY
+					&& gameRunning) {
 				game.checkListContents();
 				game.update();
 				musicManager.updateMusic();
@@ -100,33 +104,37 @@ public class Game {
 		System.exit(0);
 	}
 
-	
 	private void spawnShip() {
 		// dispose of old entities
 		objects = new CopyOnWriteArrayList<>();
 		asteroids = new ArrayList<Asteroid>();
 		ship = null;
-		
+		// create new ship for the new game
 		ship = new Ship(this.ctrl);
 		objects.add(ship);
 	}
-	
-	private void checkListContents(){
-		boolean running=false;
+
+	/*
+	 * check if there are no more enemies on the level and generate new enemies
+	 * if so
+	 */
+	private void checkListContents() {
+		boolean running = false;
 		for (GameObject obj : objects) {
-			if((obj instanceof AlienShip) || (obj instanceof Asteroid)){
+			if ((obj instanceof AlienShip) || (obj instanceof Asteroid)) {
 				running = true;
 			}
 		}
-		if(!running){
+		if (!running) {
 			generateEnemies();
 			ship.giveInvulnerability();
-			running=false;
+			running = false;
 		}
 	}
-	
+
+	/* method generates stronger and numerous enemies as the game progresses */
 	private void generateEnemies() {
-		
+
 		// initialize new entities
 		for (int i = 0; i < Constants.N_INITIAL_ASTEROIDS; i++) {
 			this.asteroids.add(Asteroid.makeRandomAsteroid());
@@ -159,17 +167,14 @@ public class Game {
 	}
 
 	public static void addScore(int addition) {
-		//System.out.println("score: " + score);
 		if (!(ship.getInvulnerabilityTimer() > 0)) {
 			score += addition;
 		}
-		//System.out.println("new score: " + score);
-		//System.out.println("+++");
 	}
 
 	public static void addLives() {
-		if ((score % Constants.GAIN_LIVES_THRESHOLD == 0) && (score != prevScore)) {
-			prevScore = score;
+		if (score >= gainLivesThreshold) {
+			gainLivesThreshold += defaultLivesThreshold;
 			incrementLives();
 		}
 	}
@@ -177,16 +182,18 @@ public class Game {
 	public static void removeLives() {
 		lives--;
 	}
-	
-	public static void incrementLives(){
+
+	public static void incrementLives() {
 		lives++;
-		if (lives > Constants.MAX_LIVES){
+		if (lives > Constants.MAX_LIVES) {
 			lives = Constants.MAX_LIVES;
 		}
 	}
 
+	@SuppressWarnings("static-method")
 	private void update() {
-		
+
+		// update all animations
 		AnimationManager.updateAnimations();
 		for (int i = 0; i < Game.objects.size(); i++) {
 			for (int j = i + 1; j < Game.objects.size(); j++) {
@@ -194,6 +201,8 @@ public class Game {
 			}
 		}
 		addLives();
+
+		// update all entities
 		List<GameObject> alive = new ArrayList<GameObject>();
 		for (GameObject object : Game.objects) {
 			object.update(alive);
@@ -205,7 +214,9 @@ public class Game {
 			Game.objects.addAll(alive);
 		}
 	}
-	
+
+	/* method spawns a random power-up with a varying bonus and velocity, takes
+	 * the position of the old entity as an argument */
 	public static void spawnPowerup(Vector2D s) {
 		if (Math.random() < 0.33) {
 			final String[] powerupNames = { "upgrWeapon", "bonusLife",
@@ -216,68 +227,100 @@ public class Game {
 			Vector2D randomXYVelocity = new Vector2D(modifyVelocity(-60
 					+ Math.random() * 120), modifyVelocity(-40 + Math.random()
 					* 80));
-			Game.objects.add(new Powerup(new Vector2D(s), randomXYVelocity, 30.0,
-					powerupNames[powerupIndex]));
+			Game.objects.add(new Powerup(new Vector2D(s), randomXYVelocity,
+					30.0, powerupNames[powerupIndex]));
 		}
 	}
-	
+
+	/* a factory method that makes creating concrete ships easier */
 	public void createAlienShip(String type) {
 		Vector2D position = new Vector2D(Math.random() * Constants.FRAME_WIDTH,
 				Math.random() * Constants.FRAME_HEIGHT * 3 / 4);
-		
+
 		switch (type) {
 		case "alienShip1":
-			objects.add(new AlienShip(position, new Vector2D(0.5, 0.5), 40, type,
-					new SeekNShoot(), 3, "redBullet", 150));
+			objects.add(new AlienShip(position, new Vector2D(0.5, 0.5), 40,
+					type, new SeekNShoot(), 3, "redBullet", 150));
 			break;
 		case "alienShip2":
-			objects.add(new AlienShip(position, new Vector2D(0.65, 0.65), 35, type,
-					new ChargeController(), 1, "redBullet", 100));
+			objects.add(new AlienShip(position, new Vector2D(0.65, 0.65), 35,
+					type, new ChargeController(), 1, "redBullet", 100));
 			break;
 		case "alienShip3":
-			objects.add(new AlienBomber(position, new Vector2D(0.5, 0.5), 40, type,
-					new BomberController(), 5, "redBullet"));
+			objects.add(new AlienBomber(position, new Vector2D(0.5, 0.5), 40,
+					type, new BomberController(), 5, "redBullet"));
 			break;
 		case "alienShip4":
-			AlienShip alien = new AlienShip(position, new Vector2D(0.5, 0.5), 40, type,
-					new SeekNShoot(), 6, "greenBullet", 300);
+			AlienShip alien = new AlienShip(position, new Vector2D(0.5, 0.5),
+					40, type, new SeekNShoot(), 6, "greenBullet", 300);
 			alien.setWeaponGrade(3);
 			objects.add(alien);
 			break;
 		case "alienShip5":
-			objects.add(new AlienScatter(position, new Vector2D(0.5, 0.5), 50, type,
-					new RotateNShoot(), 4, "purpleBullet"));
+			objects.add(new AlienScatter(position, new Vector2D(0.5, 0.5), 50,
+					type, new RotateNShoot(), 4, "purpleBullet"));
 			break;
 		default:
 			System.out.println("createAlienShip input type is not valid!");
 		}
 
 	}
-	
-	public void createMultipleShips(int number, String type){
-		for (;number > 0; number--){
+
+	public void createMultipleShips(int num, String type) {
+		int number = num;
+		for (; number > 0; number--) {
 			createAlienShip(type);
 		}
 	}
-	
+
+	/* a utility method that diverges values away from 0 */
 	public static double modifyVelocity(double vel) {
-		if (vel < 0) {
-			vel -= 50;
+		double velocity = vel;
+		if (velocity < 0) {
+			velocity -= 50;
 		} else {
-			vel += 50;
+			velocity += 50;
 		}
-		return vel;
+		return velocity;
 	}
 
 	public static Ship getShip() {
 		return ship;
 	}
-	
-	public static MainMenu getMainMenu(){
+
+	public static MainMenu getMainMenu() {
 		return mainMenu;
 	}
-	
-	public static double calculateDistance(double relativeX, double relativeY){
-		return Math.sqrt(Math.pow(relativeX,2) + Math.pow(relativeY, 2));
+
+	public static double calculateDistance(double relativeX, double relativeY) {
+		return Math.sqrt(Math.pow(relativeX, 2) + Math.pow(relativeY, 2));
+	}
+
+	public static int getLives() {
+		return lives;
+	}
+
+	public static void setCurrentWave(int wave) {
+		currentWave = wave;
+	}
+
+	public static boolean isGameRunning() {
+		return gameRunning;
+	}
+
+	public static void setGameRunning(boolean gameRunning) {
+		Game.gameRunning = gameRunning;
+	}
+
+	public static CopyOnWriteArrayList<GameObject> getObjects() {
+		return objects;
+	}
+
+	public static MusicManager getMusicManager() {
+		return musicManager;
+	}
+
+	public static int getScore() {
+		return score;
 	}
 }
